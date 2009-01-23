@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cp crochet.py ~/coderepos_svn/crochet/
+cp chat.xrc ~/coderepos_svn/crochet/
+cp chat.xcfg ~/coderepos_svn/crochet/
+cp twitter3.py ~/coderepos_svn/crochet/
+cp wx_utils.py ~/coderepos_svn/crochet/
+cp .chat/twdata_sample ~/coderepos_svn/crochet/.chat/twdata
+cp setup.py ~/coderepos_svn/crochet/
+cp toDate2.py ~/coderepos_svn/crochet/

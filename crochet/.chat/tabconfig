@@ -1,0 +1,9 @@
+{
+	"tabName":
+		["fav","ゴミ"]
+	,
+	"tabFilter":[
+		["fav","sample_user_name","＞ω＜",false,false,false,false],
+		["ゴミ","","ゴミ|ごみ",true,false,false,false]
+	]
+} 

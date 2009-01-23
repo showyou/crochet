@@ -1,0 +1,1 @@
+tabname,idfilter,bodyfilter,movefrom,searchboth,regexenable,setMark

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resource>
+  <object class="wxFrame" name="MainFrame">
+    <title>crochet</title>
+    <style>wxWANTS_CHARS</style>
+    <object class="wxSplitterWindow">
+      <orientation>horizontal</orientation>
+      <object class="wxNotebook">
+        <object class="notebookpage">
+          <label>Recent</label>
+          <object class="wxPanel" name="ID_TWIT_PANEL_RECENT">
+            <object class="wxBoxSizer">
+              <orient>wxVERTICAL</orient>
+              <object class="sizeritem">
+                <object class="wxListCtrl" name="ID_TWITLIST">
+                  <style>wxLC_REPORT|wxLC_HRULES|wxWANTS_CHARS</style>
+                </object>
+                <option>1</option>
+                <flag>wxEXPAND|wxGROW</flag>
+              </object>
+            </object>
+            <style>wxWANTS_CHARS</style>
+          </object>
+        </object>
+        <object class="notebookpage">
+          <label>Reply</label>
+          <object class="wxPanel"/>
+        </object>
+        <object class="notebookpage">
+          <label>Direct</label>
+          <object class="wxPanel"/>
+        </object>
+      </object>
+      <object class="wxPanel">
+        <object class="wxBoxSizer">
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxBoxSizer">
+              <orient>wxHORIZONTAL</orient>
+              <object class="sizeritem">
+                <object class="wxStaticBitmap">
+                  <bitmap stock_id="wxART_GO_UP"></bitmap>
+                  <size>64,64</size>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxBoxSizer">
+                  <orient>wxVERTICAL</orient>
+                  <object class="sizeritem">
+                    <object class="wxStaticText" name="ID_USERNAME">
+                      <style>wxNO_BORDER</style>
+                      <label></label>
+                    </object>
+                    <flag>wxALIGN_LEFT</flag>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxTextCtrl" name="ID_TWITTEXT">
+                      <value>発言内容はサンプルです。</value>
+                      <style>wxTE_MULTILINE|wxTE_READONLY|wxSIMPLE_BORDER</style>
+                    </object>
+                    <option>1</option>
+                    <flag>wxEXPAND</flag>
+                    <border>1</border>
+                  </object>
+                </object>
+                <option>1</option>
+                <flag>wxEXPAND</flag>
+              </object>
+            </object>
+            <flag>wxEXPAND|wxGROW</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="wxBoxSizer">
+              <orient>wxHORIZONTAL</orient>
+              <object class="sizeritem">
+                <object class="wxTextCtrl" name="ID_TEXT"/>
+                <option>2</option>
+                <flag>wxEXPAND|wxGROW</flag>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText" name="ID_LENGTH">
+                  <label>140</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxButton" name="ID_SEND_BUTTON">
+                  <label>送信</label>
+                </object>
+                <option>0</option>
+              </object>
+            </object>
+            <flag>wxEXPAND|wxGROW</flag>
+          </object>
+        </object>
+      </object>
+    </object>
+    <object class="wxStatusBar" name="StatusBar"/>
+  </object>
+</resource>
