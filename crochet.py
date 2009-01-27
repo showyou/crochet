@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 -*-
 
 import sys,os,time,re
 import wx
@@ -15,21 +15,14 @@ import thread
 import toDate
 from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 
+import configDialog
 import config
 
 """自動で chdirし，working directory を crochet のあるディレクトリにする"""
 dir = os.path.split(sys.argv[0])[0]
 os.chdir(dir)
 
-
-g_config = {}
-g_config['mycolor'] = wx.Color(240,248,255)
-g_config['listIcon'] = False
-g_config['popup'] = True
-g_config['narrowmsg'] = True
-g_config['timestring_twitter_api'] = "%a %b %d %H:%M:%S +0000 %Y"
-g_config['timestring_twitter_friend_scraping'] = "%Y-%m-%dT%H:%M:%S+00:00"
-
+g_config = config.Config()
 """自動リサイズするListCtrl"""
 class ListCtrlAutoWidth(wx.ListCtrl, ListCtrlAutoWidthMixin):
  	def __init__(self, parent):
@@ -252,41 +245,9 @@ class TmpTwitPage(wx.NotebookPage):
 		mainText = mainText.replace("href=\"/","href=\"http://twitter.com/")
 
 		""" 30文字折り返し"""
-		if g_config['narrowmsg']:
-			tmpTextLen = len(mainText);
-			tmpText = mainText;
-			tmpTagRe = re.compile("(<.+?>)")
-			tmpTagSplit = tmpTagRe.split(tmpText);
-			mainText = ""
-			tb = 30
-			tbc = 0
-			for s in tmpTagSplit:
-				tmplen = len(s);
-				print "s:",s,",",tmplen,",",tbc
-				if tmpTagRe.match(s) != None:
-					mainText += s
-					continue
-				if tbc != 0:
-					if  tb <= tbc+tmplen:
-						mainText+=s[0:tb-tbc]
-						mainText += u"<BR>"
-						i = tb-tbc
-						tbc = 0
-					else:
-						mainText+=s
-						tbc += tmplen
-						continue
-				else: i=0
-				
-				while i<tmplen-tb:
-					mainText += s[i:i+tb]
-					mainText += u"<BR>"
-					i+=tb
-				if i<tmplen:
-					mainText += s[i:tmplen]
-					tbc+=tmplen-i;
+
 					
-		print "mainText",mainText
+		#print "mainText",mainText
 		
 		text.SetValue(mainText)
 		label.SetLabel(dataList[selectedRow][1])
@@ -308,7 +269,7 @@ class TmpTwitPage(wx.NotebookPage):
 				self.list.SetItemBackgroundColour(i,g_config['mycolor'])
 
 			if re.search(user,self.dataList[i][2]):
-				self.list.SetItemBackgroundColour(i,wx.Color(255,153,153))
+				self.list.SetItemBackgroundColour(i,g_config['forMeColor'])
 
 	def ResetCount(self):
 		self.count = 0
@@ -426,7 +387,7 @@ class TmpTwitPage(wx.NotebookPage):
 				self.list.SetItemBackgroundColour(i,g_config['mycolor'])
 
 			if re.search(user,b[2]):
-				self.list.SetItemBackgroundColour(i,wx.Color(255,153,153))
+				self.list.SetItemBackgroundColour(i,g_config['forMeColor'])
 		
 			#import time
 			#time.sleep(1)		
@@ -469,13 +430,10 @@ class CustomPage(TmpTwitPage):
 最近のfriendsの発言一覧を表示するページ
 customPageは上に移った
 """
-
 class RecentPage(TmpTwitPage):
 	def __init__(self, parent,threadLock,filter):
 		TmpTwitPage.__init__(self,u"最新",parent,threadLock)
 
-		#self.dataList = []
-		#self.hiddenDataList = []
 		self.customPages = {}# フィルタリングページの固まり？
 		self.filter = filter
 
@@ -518,10 +476,8 @@ class RecentPage(TmpTwitPage):
 				dataListElement.append("")
 				dataListElement.append(x[0])
 				dataListElement.append(x[1])
-				#xx2 = "Thu Jan 22 10:08:21 +0000 2009"
-				#apiFormat = "%a %b %d %H:%M:%S +0000 %Y"
-				x2 = toDate.toDate(x[2],g_config["timestring_twitter_api"]).strftime("%b %d %H:%M:%S")
-				#x2 = toDate.toDate(xx2, apiFormat)
+				x2 = "--"
+				#x2 = toDate.toDate(x[2],g_config["timestring_twitter_api"]).strftime("%b %d %H:%M:%S")
 				dataListElement.append(x2)
 				dataListElement.append(x[3])
 
@@ -552,11 +508,6 @@ class RecentPage(TmpTwitPage):
 					outString,self.img)
 			else:
 				TmpTwitPage.CallGrowl(self,"Recent 新着"+str(outCount)+"件",outString)
-
-		#print ("xe"),
-		#print self.owner,
-		#self.owner.SetNowTime2StatusBar()
-		#print ("end recent:refreshlist")
 
 class ReplyPage(TmpTwitPage):
 
@@ -672,7 +623,6 @@ import wx.aui
 class MainFrame(wx.Frame):
 	"""MainFrame class deffinition.
 	"""
-	#binder = wx_utils.bind_manager()
 
 	TIMER_ID = 1
 	TIMER_ID2= TIMER_ID+1
@@ -698,7 +648,7 @@ class MainFrame(wx.Frame):
 		try:
 			twUserdata = self.loadUserData(".chat/twdata")
 		except:
-			twUserdata = config.ConfigDialog(None, -1, 'crochet config').GetAccount()
+			twUserdata = configDialog.ConfigDialog(None, -1, 'crochet config').GetAccount()
 			if twUserdata["user"] and twUserdata["pass"]:
 				file = open(".chat/twdata","w")
 				file.write("{\"user\":\""+twUserdata["user"]+
